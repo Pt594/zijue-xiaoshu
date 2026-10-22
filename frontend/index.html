@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>自觉小树 - 儿童自觉学习平台</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌳</text></svg>">
+</head>
+<body>
+  <!-- 登录/注册页 -->
+  <div id="auth-page" class="page active">
+    <div class="auth-container">
+      <div class="logo-area">
+        <div class="tree-logo">🌳</div>
+        <h1>自觉小树</h1>
+        <p class="subtitle">一起长大，一起发光 ✨</p>
+      </div>
+      
+      <div class="auth-tabs">
+        <button class="tab active" data-tab="login">登录</button>
+        <button class="tab" data-tab="register">注册</button>
+      </div>
+
+      <form id="login-form" class="auth-form">
+        <div class="form-group">
+          <label>用户名</label>
+          <input type="text" id="login-username" placeholder="输入用户名" required>
+        </div>
+        <div class="form-group">
+          <label>密码</label>
+          <input type="password" id="login-password" placeholder="输入密码" required>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">🚀 开始冒险</button>
+      </form>
+
+      <form id="register-form" class="auth-form hidden">
+        <div class="form-group">
+          <label>我是</label>
+          <div class="role-select">
+            <label class="role-option">
+              <input type="radio" name="role" value="child" checked>
+              <span>🧒 小朋友</span>
+            </label>
+            <label class="role-option">
+              <input type="radio" name="role" value="parent">
+              <span>👨‍👩‍👧 家长</span>
+            </label>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>用户名</label>
+          <input type="text" id="reg-username" placeholder="起一个好听的名字" required>
+        </div>
+        <div class="form-group">
+          <label>显示昵称</label>
+          <input type="text" id="reg-displayname" placeholder="大家怎么叫你" required>
+        </div>
+        <div class="form-group">
+          <label>密码</label>
+          <input type="password" id="reg-password" placeholder="至少4位" required minlength="4">
+        </div>
+        <div class="form-group" id="parent-username-group">
+          <label>家长用户名（可选）</label>
+          <input type="text" id="reg-parent" placeholder="如果有家长账号可填写">
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">🌱 种下小树</button>
+      </form>
+
+      <p class="auth-tip">提示：先注册家长账号，再注册孩子并填写家长用户名即可绑定</p>
+    </div>
+  </div>
+
+  <!-- 主应用 -->
+  <div id="app-page" class="page">
+    <!-- 顶部导航 -->
+    <header class="app-header">
+      <div class="header-left">
+        <span class="header-logo">🌳</span>
+        <span class="header-title">自觉小树</span>
+      </div>
+      <div class="header-right">
+        <div class="user-info" id="user-info">
+          <span class="user-avatar" id="user-avatar">🌱</span>
+          <span class="user-name" id="user-name">小树</span>
+        </div>
+        <button class="btn-icon" id="logout-btn" title="退出">🚪</button>
+      </div>
+    </header>
+
+    <!-- 儿童端主界面 -->
+    <div id="child-dashboard" class="dashboard hidden">
+      <!-- 成长状态卡片 -->
+      <section class="growth-card">
+        <div class="tree-display" id="tree-display">
+          <div class="tree-visual" id="tree-visual">🌱</div>
+          <div class="tree-info">
+            <div class="level-badge">Lv.<span id="user-level">1</span></div>
+            <div class="stars-display">⭐ <span id="user-stars">0</span> 星星</div>
+            <div class="study-time">⏱️ 已学习 <span id="user-minutes">0</span> 分钟</div>
+          </div>
+        </div>
+        <div class="progress-bar-container">
+          <div class="progress-bar" id="level-progress"></div>
+        </div>
+        <p class="progress-tip" id="progress-tip">再获得 10 颗星星就能升级啦！</p>
+      </section>
+
+      <!-- 快捷操作 -->
+      <section class="quick-actions">
+        <button class="action-btn" data-view="timer">
+          <span class="action-icon">🍅</span>
+          <span>番茄钟</span>
+        </button>
+        <button class="action-btn" data-view="checkin">
+          <span class="action-icon">✅</span>
+          <span>打卡</span>
+        </button>
+        <button class="action-btn" data-view="goals">
+          <span class="action-icon">🎯</span>
+          <span>目标</span>
+        </button>
+        <button class="action-btn" data-view="learn">
+          <span class="action-icon">📚</span>
+          <span>学习</span>
+        </button>
+        <button class="action-btn" data-view="badges">
+          <span class="action-icon">🏆</span>
+          <span>徽章</span>
+        </button>
+      </section>
+
+      <!-- 内容区域 -->
+      <main class="main-content">
+        <!-- 番茄钟视图 -->
+        <div id="view-timer" class="view">
+          <h2 class="view-title">🍅 专注番茄钟</h2>
+          <div class="timer-container">
+            <div class="timer-display" id="timer-display">25:00</div>
+            <div class="timer-controls">
+              <button class="btn btn-secondary" id="timer-25">25分钟</button>
+              <button class="btn btn-secondary" id="timer-15">15分钟</button>
+              <button class="btn btn-secondary" id="timer-5">5分钟</button>
+            </div>
+            <div class="timer-buttons">
+              <button class="btn btn-primary btn-lg" id="timer-start">开始专注</button>
+              <button class="btn btn-outline btn-lg hidden" id="timer-pause">暂停</button>
+              <button class="btn btn-outline btn-lg hidden" id="timer-reset">重置</button>
+            </div>
+            <p class="timer-tip">完成一次番茄钟可获得 1 颗星星 ⭐</p>
+          </div>
+        </div>
+
+        <!-- 打卡视图 -->
+        <div id="view-checkin" class="view hidden">
+          <h2 class="view-title">✅ 今日打卡</h2>
+          <form id="checkin-form" class="card-form">
+            <div class="form-group">
+              <label>关联目标（可选）</label>
+              <select id="checkin-goal">
+                <option value="">不关联目标</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>学习时长（分钟）</label>
+              <input type="number" id="checkin-minutes" min="0" max="180" value="25" placeholder="学习了多久">
+            </div>
+            <div class="form-group">
+              <label>今日感想</label>
+              <textarea id="checkin-note" rows="3" placeholder="今天学了什么？感觉怎么样？"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">🌟 完成打卡</button>
+          </form>
+          <div class="recent-checkins">
+            <h3>最近打卡</h3>
+            <div id="checkin-list" class="list-container"></div>
+          </div>
+        </div>
+
+        <!-- 目标视图 -->
+        <div id="view-goals" class="view hidden">
+          <h2 class="view-title">🎯 我的学习目标</h2>
+          <button class="btn btn-primary" id="add-goal-btn">+ 设定新目标</button>
+          
+          <div id="goal-form-container" class="card-form hidden">
+            <form id="goal-form">
+              <div class="form-group">
+                <label>目标标题</label>
+                <input type="text" id="goal-title" placeholder="例如：每天背10个单词" required>
+              </div>
+              <div class="form-group">
+                <label>科目</label>
+                <select id="goal-subject">
+                  <option value="综合">综合</option>
+                  <option value="语文">语文</option>
+                  <option value="数学">数学</option>
+                  <option value="英语">英语</option>
+                  <option value="科学">科学</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>目标次数</label>
+                <input type="number" id="goal-target" min="1" max="30" value="7" placeholder="完成几次算达成">
+              </div>
+              <div class="form-group">
+                <label>描述（可选）</label>
+                <textarea id="goal-desc" rows="2" placeholder="补充说明"></textarea>
+              </div>
+              <div class="form-actions">
+                <button type="submit" class="btn btn-primary">保存目标</button>
+                <button type="button" class="btn btn-outline" id="cancel-goal">取消</button>
+              </div>
+            </form>
+          </div>
+
+          <div id="goals-list" class="list-container"></div>
+        </div>
+
+        <!-- 学习内容视图 -->
+        <div id="view-learn" class="view hidden">
+          <h2 class="view-title">📚 学习小课堂</h2>
+          <div class="subject-filters">
+            <button class="filter-btn active" data-subject="all">全部</button>
+            <button class="filter-btn" data-subject="数学">数学</button>
+            <button class="filter-btn" data-subject="语文">语文</button>
+            <button class="filter-btn" data-subject="英语">英语</button>
+            <button class="filter-btn" data-subject="科学">科学</button>
+          </div>
+          <div id="content-list" class="content-grid"></div>
+          
+          <!-- 内容详情弹窗 -->
+          <div id="content-modal" class="modal hidden">
+            <div class="modal-content">
+              <button class="modal-close" id="close-content">×</button>
+              <div id="content-detail"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 徽章视图 -->
+        <div id="view-badges" class="view hidden">
+          <h2 class="view-title">🏆 我的徽章墙</h2>
+          <div id="badges-list" class="badges-grid"></div>
+          <p class="empty-tip" id="badges-empty">还没有徽章，快去打卡和学习吧！</p>
+        </div>
+      </main>
+    </div>
+
+    <!-- 家长端主界面 -->
+    <div id="parent-dashboard" class="dashboard hidden">
+      <section class="parent-header">
+        <h2>👨‍👩‍👧 家长中心</h2>
+        <p>查看孩子的学习成长情况</p>
+      </section>
+      <div id="children-list" class="children-grid"></div>
+      
+      <div id="child-detail" class="child-detail hidden">
+        <button class="btn btn-outline" id="back-to-children">← 返回孩子列表</button>
+        <div id="child-detail-content"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 奖励弹窗 -->
+  <div id="reward-modal" class="modal hidden">
+    <div class="modal-content reward-content">
+      <div class="reward-icon" id="reward-icon">⭐</div>
+      <h3 id="reward-title">太棒了！</h3>
+      <p id="reward-message"></p>
+      <div id="reward-badges" class="reward-badges"></div>
+      <button class="btn btn-primary" id="close-reward">继续加油！</button>
+    </div>
+  </div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
